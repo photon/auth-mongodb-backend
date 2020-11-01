@@ -11,10 +11,11 @@ class TestCase extends \photon\test\TestCase
 {
     protected $admin = null;
     protected $user = null;
+    protected $user2 = null;
 
-    public function setup()
+    public function setUp() : void
     {
-        parent::setup();
+        parent::setUp();
 
         // Cleanup database
         $db = \photon\db\Connection::get('default');

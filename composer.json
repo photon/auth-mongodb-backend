@@ -34,8 +34,8 @@
         "photon/api-json": "^1.3"
     },
     "require-dev": {
-        "phpunit/phpunit": "^5.0",
-        "squizlabs/php_codesniffer": "^3.2"
+        "phpunit/phpunit": "^9.0",
+        "phpunit/php-code-coverage": "^9.0"
     },
     "autoload": {
         "psr-4": {
