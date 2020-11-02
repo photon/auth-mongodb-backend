@@ -83,4 +83,21 @@ class GroupsTest extends TestCase
       list($req, $resp) = $dispatcher->dispatch($req);
       $this->assertEquals(204, $resp->status_code);
     }
+
+    public function testCreateGroupBadPayload()
+    {
+      $dispatcher = new \photon\core\Dispatcher;
+
+      $this->createAdmin();
+
+      $payload = array(
+        'bad' => 'name'
+      );
+      $stream = fopen('data:text/plain;base64,' . base64_encode(json_encode($payload) . "\n"), 'rb');
+      $url = '/api/group';
+      $req = \photon\test\HTTP::baseRequest('POST', $url, null, $stream, array(), array('content-type' => 'application/json'));
+      $req->user = $this->admin;
+      list($req, $resp) = $dispatcher->dispatch($req);
+      $this->assertEquals(400, $resp->status_code);
+    }
 }

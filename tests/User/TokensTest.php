@@ -1,12 +1,12 @@
 <?php
 
-namespace tests;
+namespace tests\User;
 
 use photon\config\Container as Conf;
 use photon\auth\api\MongoDB;
 use photon\auth\MongoDBUserToken;
 
-class UserTokensTest extends TestCase
+class TokensTest extends \tests\TestCase
 {
     public function testUnknownUser()
     {
@@ -14,19 +14,7 @@ class UserTokensTest extends TestCase
 
       $this->createAdmin();
 
-      $req = \photon\test\HTTP::baseRequest('POST', '/api/user/5f92f0e9fde8b71d307d703b/token');
-      $req->user = $this->admin;
-      list($req, $resp) = $dispatcher->dispatch($req);
-      $this->assertEquals(404, $resp->status_code);
-    }
-
-    public function testUnknownUserToken()
-    {
-      $dispatcher = new \photon\core\Dispatcher;
-
-      $this->createAdmin();
-
-      $req = \photon\test\HTTP::baseRequest('DELETE', '/api/user/' . $this->admin->getId() . '/token/5f92f0e9fde8b71d307d703b');
+      $req = \photon\test\HTTP::baseRequest('GET', '/api/user/5f92f0e00000000d307d703b/token');
       $req->user = $this->admin;
       list($req, $resp) = $dispatcher->dispatch($req);
       $this->assertEquals(404, $resp->status_code);
@@ -71,6 +59,20 @@ class UserTokensTest extends TestCase
       $json = json_decode($resp->content);
       $this->assertNotEquals(false, $json);
       $this->assertEquals(0, count($json));
+    }
+
+    public function testListTokenOfAnother()
+    {
+      $dispatcher = new \photon\core\Dispatcher;
+
+      $this->createAdmin();
+      $this->createUser();
+
+      // List user tokens (connected as user)
+      $req = \photon\test\HTTP::baseRequest('GET', '/api/user/' . $this->admin->getId() . '/token');
+      $req->user = $this->user;
+      list($req, $resp) = $dispatcher->dispatch($req);
+      $this->assertEquals(403, $resp->status_code);
     }
 
     public function testCreateToken()
@@ -133,5 +135,23 @@ class UserTokensTest extends TestCase
         'user' => $this->user->getId()
       ));
       $this->assertEquals(0, $count);
+    }
+
+    public function testUserTokensBadPayload()
+    {
+      $dispatcher = new \photon\core\Dispatcher;
+
+      $this->createUser();
+
+      // No expire field
+      $payload = array(
+        'my' => 'bad'
+      );
+      $stream = fopen('data:text/plain;base64,' . base64_encode(json_encode($payload) . "\n"), 'rb');
+      $url = '/api/user/' . $this->user->getId() . '/token';
+      $req = \photon\test\HTTP::baseRequest('POST', $url, null, $stream, array(), array('content-type' => 'application/json'));
+      $req->user = $this->user;
+      list($req, $resp) = $dispatcher->dispatch($req);
+      $this->assertEquals(400, $resp->status_code);
     }
 }

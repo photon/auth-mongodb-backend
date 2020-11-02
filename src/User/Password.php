@@ -5,7 +5,7 @@ namespace photon\auth\api\MongoDB\User;
 use photon\auth\api\MongoDB\APICommon;
 use photon\storage\mongodb;
 use photon\http\response\NoContent;
-use photon\http\response\Created;
+use photon\http\response\BadRequest;
 
 /*
  *  Update the user password

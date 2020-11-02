@@ -4,9 +4,8 @@ namespace photon\auth\api\MongoDB\User;
 
 use photon\auth\api\MongoDB\APICommon;
 use photon\storage\mongodb;
-use photon\http\response\Forbidden;
-use photon\http\response\NoContent;
 use photon\http\response\Created;
+use photon\http\response\BadRequest;
 
 /*
  *  Only users with the admin precondition can perform this action

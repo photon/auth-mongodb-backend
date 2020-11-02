@@ -4,7 +4,7 @@ namespace photon\auth\api\MongoDB\Group;
 
 use photon\auth\api\MongoDB\APICommon;
 use photon\storage\mongodb;
-use photon\http\response\NoContent;
+use photon\http\response\BadRequest;
 use photon\http\response\Created;
 
 /*
@@ -38,21 +38,23 @@ class Members extends APICommon
      */
     public function POST($request, $match)
     {
-      if (isset($request->JSON) === false) {
+      if (isset($request->JSON) === false || isset($request->JSON->member) === false) {
           return new BadRequest;
       }
 
       // Append one user in the group
-      if (isset($request->JSON->member)) {
-        $class = $this->getUserClass();
-        $user = new $class($this->getUserQueryById($request->JSON->member));
-
-        $this->group->addUser($user);
-        $this->group->save();
-
-        return new Created;
+      try {
+          $class = $this->getUserClass();
+          $query = $this->getUserQueryById($request->JSON->member);
+          $user = new $class($query);
+      }
+      catch(mongodb\Exception $e) {
+        return new BadRequest;
       }
 
-      return new BadRequest;
+      $this->group->addUser($user);
+      $this->group->save();
+
+      return new Created;
     }
 }

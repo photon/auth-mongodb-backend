@@ -9,6 +9,7 @@ use photon\auth\MongoDBBackend;
 
 class TestCase extends \photon\test\TestCase
 {
+    protected $group = null;
     protected $admin = null;
     protected $user = null;
     protected $user2 = null;
@@ -38,6 +39,15 @@ class TestCase extends \photon\test\TestCase
         ));
     }
 
+    protected function createGroup()
+    {
+      $group = new \photon\auth\MongoDBGroup;
+      $group->setName('Mun');
+      $group->save();
+
+      $this->group = $group;
+    }
+
     protected function createUser()
     {
       $user = new \photon\auth\MongoDBUser;
@@ -47,6 +57,17 @@ class TestCase extends \photon\test\TestCase
       $user->save();
 
       $this->user = $user;
+    }
+
+    protected function createUser2()
+    {
+      $user = new \photon\auth\MongoDBUser;
+      $user->setName('Cretinous Rabbit');
+      $user->setLogin('cr@exemple.com');
+      $user->setPassword('secret');
+      $user->save();
+
+      $this->user2 = $user;
     }
 
     protected function createAdmin()

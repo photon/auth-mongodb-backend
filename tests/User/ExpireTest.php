@@ -1,12 +1,12 @@
 <?php
 
-namespace tests;
+namespace tests\User;
 
 use photon\config\Container as Conf;
 use photon\auth\api\MongoDB;
 use DateTime;
 
-class UserExpireTest extends TestCase
+class ExpireTest extends \tests\TestCase
 {
     public function testUnknownUser()
     {
@@ -74,5 +74,35 @@ class UserExpireTest extends TestCase
         $this->user->reload();
         $expire = $this->user->getExpirationDate(true);
         $this->assertEquals(null, $expire);
+    }
+
+    public function testUserExpireBadPayload()
+    {
+      $dispatcher = new \photon\core\Dispatcher;
+
+      $this->createAdmin();
+      $this->createUser();
+
+      // No expire field
+      $payload = array(
+        'bad' => 'name'
+      );
+      $stream = fopen('data:text/plain;base64,' . base64_encode(json_encode($payload) . "\n"), 'rb');
+      $url = '/api/user/' . $this->user->getId() . '/expire';
+      $req = \photon\test\HTTP::baseRequest('PUT', $url, null, $stream, array(), array('content-type' => 'application/json'));
+      $req->user = $this->admin;
+      list($req, $resp) = $dispatcher->dispatch($req);
+      $this->assertEquals(400, $resp->status_code);
+
+      // Bad expire field
+      $payload = array(
+        'expire' => 'Le vendredi 42 septembre 1987 à 18h45'
+      );
+      $stream = fopen('data:text/plain;base64,' . base64_encode(json_encode($payload) . "\n"), 'rb');
+      $url = '/api/user/' . $this->user->getId() . '/expire';
+      $req = \photon\test\HTTP::baseRequest('PUT', $url, null, $stream, array(), array('content-type' => 'application/json'));
+      $req->user = $this->admin;
+      list($req, $resp) = $dispatcher->dispatch($req);
+      $this->assertEquals(400, $resp->status_code);
     }
 }

@@ -5,6 +5,7 @@ namespace photon\auth\api\MongoDB\User;
 use photon\auth\api\MongoDB\APICommon;
 use photon\storage\mongodb;
 use photon\http\response\NoContent;
+use photon\http\response\BadRequest;
 use DateTime;
 
 class Expire extends APICommon
@@ -36,9 +37,13 @@ class Expire extends APICommon
             return new BadRequest;
         }
 
-        $date = new DateTime($request->JSON->expire);
-        if ($date === false) {
-            return new BadRequest;
+        try {
+          $date = new DateTime($request->JSON->expire);
+          if ($date === false) {
+              return new BadRequest;
+          }
+        } catch(\Exception $e) {
+          return new BadRequest;
         }
 
         $this->user->setExpirationDate($date);

@@ -5,6 +5,7 @@ namespace photon\auth\api\MongoDB\User;
 use photon\auth\api\MongoDB\APICommon;
 use photon\storage\mongodb;
 use photon\http\response\NoContent;
+use photon\http\response\NotFound;
 
 /*
  *  Only users with the admin precondition can perform this action

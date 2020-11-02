@@ -1,12 +1,12 @@
 <?php
 
-namespace tests;
+namespace tests\User;
 
 use photon\config\Container as Conf;
 use photon\auth\api\MongoDB;
 use DateTime;
 
-class UserPasswordTest extends TestCase
+class PasswordTest extends \tests\TestCase
 {
     public function testUnknownUser()
     {
@@ -112,7 +112,7 @@ class UserPasswordTest extends TestCase
         // Regular user with password
         $this->assertNotEmpty($this->user->password);
 
-        // An admin block the user
+        // Update the password of another user
         $password = '83816eba-13a4-11eb-8588-93ff0f53b970';
         $payload = array(
           'password' => $password
@@ -123,5 +123,23 @@ class UserPasswordTest extends TestCase
         $req->user = $this->user;
         list($req, $resp) = $dispatcher->dispatch($req);
         $this->assertEquals(403, $resp->status_code);
+    }
+
+    public function testUserSetPasswordNoPayload()
+    {
+        $dispatcher = new \photon\core\Dispatcher;
+
+        $this->createUser();
+
+        // Invalid payload
+        $payload = array(
+          'my' => 'bad'
+        );
+        $stream = fopen('data:text/plain;base64,' . base64_encode(json_encode($payload) . "\n"), 'rb');
+        $url = '/api/user/' . $this->user->getId() . '/password';
+        $req = \photon\test\HTTP::baseRequest('PUT', $url, null, $stream, array(), array('content-type' => 'application/json'));
+        $req->user = $this->user;
+        list($req, $resp) = $dispatcher->dispatch($req);
+        $this->assertEquals(400, $resp->status_code);
     }
 }

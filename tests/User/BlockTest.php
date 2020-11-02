@@ -1,11 +1,11 @@
 <?php
 
-namespace tests;
+namespace tests\User;
 
 use \photon\config\Container as Conf;
 use \photon\auth\api\MongoDB;
 
-class UserBlockTest extends TestCase
+class BlockTest extends \tests\TestCase
 {
     public function testUnknownUser()
     {
