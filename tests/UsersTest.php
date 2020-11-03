@@ -64,57 +64,57 @@ class UsersTest extends TestCase
 
     public function testCreateDeleteUser()
     {
-      $dispatcher = new \photon\core\Dispatcher;
+        $dispatcher = new \photon\core\Dispatcher;
 
-      $this->createAdmin();
+        $this->createAdmin();
 
       // Create the user 'Joe'
-      $payload = array(
+        $payload = array(
         'login' => 'Joe',
         'password' => 'foobar',
-      );
-      $stream = fopen('data:text/plain;base64,' . base64_encode(json_encode($payload) . "\n"), 'rb');
-      $url = '/api/user';
-      $req = \photon\test\HTTP::baseRequest('POST', $url, null, $stream, array(), array('content-type' => 'application/json'));
-      $req->user = $this->admin;
-      list($req, $resp) = $dispatcher->dispatch($req);
-      $this->assertEquals(201, $resp->status_code);
-      $json = json_decode($resp->content);
-      $this->assertNotEquals(false, $json);
+        );
+        $stream = fopen('data:text/plain;base64,' . base64_encode(json_encode($payload) . "\n"), 'rb');
+        $url = '/api/user';
+        $req = \photon\test\HTTP::baseRequest('POST', $url, null, $stream, array(), array('content-type' => 'application/json'));
+        $req->user = $this->admin;
+        list($req, $resp) = $dispatcher->dispatch($req);
+        $this->assertEquals(201, $resp->status_code);
+        $json = json_decode($resp->content);
+        $this->assertNotEquals(false, $json);
 
       // Reload user (generate exception if do not exists)
-      $config = MongoDBBackend::getConfig();
-      $user = new \photon\auth\MongoDBUser(array($config['user_login'] => 'Joe'));
+        $config = MongoDBBackend::getConfig();
+        $user = new \photon\auth\MongoDBUser(array($config['user_login'] => 'Joe'));
 
       // Get the user
-      $req = \photon\test\HTTP::baseRequest('GET', '/api/user/' . $user->getId());
-      $req->user = $this->admin;
-      list($req, $resp) = $dispatcher->dispatch($req);
-      $this->assertEquals(200, $resp->status_code);
-      $json = json_decode($resp->content);
-      $this->assertNotEquals(false, $json);
+        $req = \photon\test\HTTP::baseRequest('GET', '/api/user/' . $user->getId());
+        $req->user = $this->admin;
+        list($req, $resp) = $dispatcher->dispatch($req);
+        $this->assertEquals(200, $resp->status_code);
+        $json = json_decode($resp->content);
+        $this->assertNotEquals(false, $json);
 
       // Delete the user
-      $req = \photon\test\HTTP::baseRequest('DELETE', '/api/user/' . $user->getId());
-      $req->user = $this->admin;
-      list($req, $resp) = $dispatcher->dispatch($req);
-      $this->assertEquals(204, $resp->status_code);
+        $req = \photon\test\HTTP::baseRequest('DELETE', '/api/user/' . $user->getId());
+        $req->user = $this->admin;
+        list($req, $resp) = $dispatcher->dispatch($req);
+        $this->assertEquals(204, $resp->status_code);
     }
 
     public function testCreateUserBadPayload()
     {
-      $dispatcher = new \photon\core\Dispatcher;
+        $dispatcher = new \photon\core\Dispatcher;
 
-      $this->createAdmin();
+        $this->createAdmin();
 
-      $payload = array(
+        $payload = array(
         'bad' => 'name'
-      );
-      $stream = fopen('data:text/plain;base64,' . base64_encode(json_encode($payload) . "\n"), 'rb');
-      $url = '/api/user';
-      $req = \photon\test\HTTP::baseRequest('POST', $url, null, $stream, array(), array('content-type' => 'application/json'));
-      $req->user = $this->admin;
-      list($req, $resp) = $dispatcher->dispatch($req);
-      $this->assertEquals(400, $resp->status_code);
+        );
+        $stream = fopen('data:text/plain;base64,' . base64_encode(json_encode($payload) . "\n"), 'rb');
+        $url = '/api/user';
+        $req = \photon\test\HTTP::baseRequest('POST', $url, null, $stream, array(), array('content-type' => 'application/json'));
+        $req->user = $this->admin;
+        list($req, $resp) = $dispatcher->dispatch($req);
+        $this->assertEquals(400, $resp->status_code);
     }
 }

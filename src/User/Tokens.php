@@ -26,8 +26,7 @@ class Tokens extends APICommon
             $query = $this->getUserQueryById($userId);
             $class = $this->getUserClass();
             $this->user = new $class($query);
-        }
-        catch(mongodb\Exception $e) {
+        } catch (mongodb\Exception $e) {
             throw new \photon\views\APIJson\Exception\NotFound;
         }
 

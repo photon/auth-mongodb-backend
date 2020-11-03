@@ -23,8 +23,7 @@ class Group extends APICommon
             $query = $this->getGroupQueryById($groupId);
             $class = $this->getGroupClass();
             $this->group = new $class($query);
-        }
-        catch(mongodb\Exception $e) {
+        } catch (mongodb\Exception $e) {
             throw new \photon\views\APIJson\Exception\NotFound;
         }
     }
@@ -40,9 +39,9 @@ class Group extends APICommon
     /*
      *  Delete the group
      */
-     public function DELETE($request, $match)
-     {
-         $this->group->delete();
-         return new NoContent;
-     }
+    public function DELETE($request, $match)
+    {
+        $this->group->delete();
+        return new NoContent;
+    }
 }

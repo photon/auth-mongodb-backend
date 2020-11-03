@@ -22,8 +22,7 @@ class User extends APICommon
             $query = $this->getUserQueryById($userId);
             $class = $this->getUserClass();
             $this->user = new $class($query);
-        }
-        catch(mongodb\Exception $e) {
+        } catch (mongodb\Exception $e) {
             throw new \photon\views\APIJson\Exception\NotFound;
         }
 
@@ -46,9 +45,9 @@ class User extends APICommon
     /*
      *  Delete the user
      */
-     public function DELETE($request, $match)
-     {
-         $this->user->delete();
-         return new NoContent;
-     }
+    public function DELETE($request, $match)
+    {
+        $this->user->delete();
+        return new NoContent;
+    }
 }

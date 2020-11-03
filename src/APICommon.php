@@ -15,106 +15,106 @@ class APICommon extends APIJson\Rest
 
     public function __construct()
     {
-      $this->config = MongoDBBackend::getConfig();
+        $this->config = MongoDBBackend::getConfig();
     }
 
     protected function getAclClass()
     {
-      return $this->config['acl_class'];
+        return $this->config['acl_class'];
     }
 
     protected function getTokenClass()
     {
-      return $this->config['token_class'];
+        return $this->config['token_class'];
     }
 
     protected function getUserClass()
     {
-      return $this->config['user_class'];
+        return $this->config['user_class'];
     }
 
     protected function getGroupClass()
     {
-      return $this->config['group_class'];
+        return $this->config['group_class'];
     }
 
     protected function getUserQueryById($id)
     {
-      return [
+        return [
         $this->config['user_id'] => $this->config['user_class']::createObjectID($id),
-      ];
+        ];
     }
 
     protected function getGroupQueryById($id)
     {
-      return [
+        return [
         '_id' => $this->config['group_class']::createObjectID($id),
-      ];
+        ];
     }
 
     protected function getTokenQueryById($id)
     {
-      return [
+        return [
         '_id' => $this->config['token_class']::createObjectID($id),
-      ];
+        ];
     }
 
     protected function getAclQueryById($id)
     {
-      return [
+        return [
         '_id' => $this->config['acl_class']::createObjectID($id),
-      ];
+        ];
     }
 
     protected function getPreconditionClass()
     {
-      return $this->config['precondition_class'];
+        return $this->config['precondition_class'];
     }
 
     protected function getPreconditionAdmin()
     {
-      return $this->config['admin_precondition'];
+        return $this->config['admin_precondition'];
     }
 
     protected function ensureUserIsConnected($request)
     {
-      $connected = $this->config['user_class']::connected($request);
-      if ($connected === true) {
-        return;
-      }
+        $connected = $this->config['user_class']::connected($request);
+        if ($connected === true) {
+            return;
+        }
 
-      throw new APIJson\Exception\Forbidden;
+        throw new APIJson\Exception\Forbidden;
     }
 
     protected function userIsAdmin($request)
     {
-      $class = $this->getPreconditionClass();
-      $name = $this->getPreconditionAdmin();
+        $class = $this->getPreconditionClass();
+        $name = $this->getPreconditionAdmin();
 
-      return $class::$name($request) === true;
+        return $class::$name($request) === true;
     }
 
     protected function userIsMe($request, $user)
     {
-      $targetUser = (string) $user->getId();
-      $connectedUser = (string) $request->user->getId();
+        $targetUser = (string) $user->getId();
+        $connectedUser = (string) $request->user->getId();
 
-      return $targetUser === $connectedUser;
+        return $targetUser === $connectedUser;
     }
 
     protected function ensureUserIsAdmin($request)
     {
-      $admin = $this->userIsAdmin($request);
-      if ($admin === true) {
-        return;
-      }
+        $admin = $this->userIsAdmin($request);
+        if ($admin === true) {
+            return;
+        }
 
-      throw new APIJson\Exception\Forbidden;
+        throw new APIJson\Exception\Forbidden;
     }
 
-    static public function getURLs()
+    public static function getURLs()
     {
-      return array(
+        return array(
         /* User */
         array('regex' => '#^user/(\w+)/password$#',
               'view' => array(User\Password::class, 'router'),
@@ -185,6 +185,6 @@ class APICommon extends APIJson\Rest
         array('regex' => '#^acl$#',
               'view' => array(Acls::class, 'router'),
               'name' => 'api_acls_view'),
-      );
+        );
     }
 }

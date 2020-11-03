@@ -10,14 +10,14 @@ class ExpireTest extends \tests\TestCase
 {
     public function testUnknownUser()
     {
-      $dispatcher = new \photon\core\Dispatcher;
+        $dispatcher = new \photon\core\Dispatcher;
 
-      $this->createAdmin();
+        $this->createAdmin();
 
-      $req = \photon\test\HTTP::baseRequest('PUT', '/api/user/5f92f0e9fde8b71d307d703b/expire');
-      $req->user = $this->admin;
-      list($req, $resp) = $dispatcher->dispatch($req);
-      $this->assertEquals(404, $resp->status_code);
+        $req = \photon\test\HTTP::baseRequest('PUT', '/api/user/5f92f0e9fde8b71d307d703b/expire');
+        $req->user = $this->admin;
+        list($req, $resp) = $dispatcher->dispatch($req);
+        $this->assertEquals(404, $resp->status_code);
     }
 
     public function testSetExpire()
@@ -78,31 +78,31 @@ class ExpireTest extends \tests\TestCase
 
     public function testUserExpireBadPayload()
     {
-      $dispatcher = new \photon\core\Dispatcher;
+        $dispatcher = new \photon\core\Dispatcher;
 
-      $this->createAdmin();
-      $this->createUser();
+        $this->createAdmin();
+        $this->createUser();
 
       // No expire field
-      $payload = array(
+        $payload = array(
         'bad' => 'name'
-      );
-      $stream = fopen('data:text/plain;base64,' . base64_encode(json_encode($payload) . "\n"), 'rb');
-      $url = '/api/user/' . $this->user->getId() . '/expire';
-      $req = \photon\test\HTTP::baseRequest('PUT', $url, null, $stream, array(), array('content-type' => 'application/json'));
-      $req->user = $this->admin;
-      list($req, $resp) = $dispatcher->dispatch($req);
-      $this->assertEquals(400, $resp->status_code);
+        );
+        $stream = fopen('data:text/plain;base64,' . base64_encode(json_encode($payload) . "\n"), 'rb');
+        $url = '/api/user/' . $this->user->getId() . '/expire';
+        $req = \photon\test\HTTP::baseRequest('PUT', $url, null, $stream, array(), array('content-type' => 'application/json'));
+        $req->user = $this->admin;
+        list($req, $resp) = $dispatcher->dispatch($req);
+        $this->assertEquals(400, $resp->status_code);
 
       // Bad expire field
-      $payload = array(
+        $payload = array(
         'expire' => 'Le vendredi 42 septembre 1987 à 18h45'
-      );
-      $stream = fopen('data:text/plain;base64,' . base64_encode(json_encode($payload) . "\n"), 'rb');
-      $url = '/api/user/' . $this->user->getId() . '/expire';
-      $req = \photon\test\HTTP::baseRequest('PUT', $url, null, $stream, array(), array('content-type' => 'application/json'));
-      $req->user = $this->admin;
-      list($req, $resp) = $dispatcher->dispatch($req);
-      $this->assertEquals(400, $resp->status_code);
+        );
+        $stream = fopen('data:text/plain;base64,' . base64_encode(json_encode($payload) . "\n"), 'rb');
+        $url = '/api/user/' . $this->user->getId() . '/expire';
+        $req = \photon\test\HTTP::baseRequest('PUT', $url, null, $stream, array(), array('content-type' => 'application/json'));
+        $req->user = $this->admin;
+        list($req, $resp) = $dispatcher->dispatch($req);
+        $this->assertEquals(400, $resp->status_code);
     }
 }

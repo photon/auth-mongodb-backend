@@ -9,14 +9,14 @@ class BlockTest extends \tests\TestCase
 {
     public function testUnknownUser()
     {
-      $dispatcher = new \photon\core\Dispatcher;
+        $dispatcher = new \photon\core\Dispatcher;
 
-      $this->createAdmin();
+        $this->createAdmin();
 
-      $req = \photon\test\HTTP::baseRequest('PUT', '/api/user/5f92f0e9fde8b71d307d703b/block');
-      $req->user = $this->admin;
-      list($req, $resp) = $dispatcher->dispatch($req);
-      $this->assertEquals(404, $resp->status_code);
+        $req = \photon\test\HTTP::baseRequest('PUT', '/api/user/5f92f0e9fde8b71d307d703b/block');
+        $req->user = $this->admin;
+        list($req, $resp) = $dispatcher->dispatch($req);
+        $this->assertEquals(404, $resp->status_code);
     }
 
     public function testBlock()

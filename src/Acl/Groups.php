@@ -24,8 +24,7 @@ class Groups extends APICommon
             $query = $this->getAclQueryById($aclId);
             $class = $this->getAclClass();
             $this->acl = new $class($query);
-        }
-        catch(mongodb\Exception $e) {
+        } catch (mongodb\Exception $e) {
             throw new \photon\views\APIJson\Exception\NotFound;
         }
     }
@@ -35,23 +34,22 @@ class Groups extends APICommon
      */
     public function POST($request, $match)
     {
-      if (isset($request->JSON) === false || isset($request->JSON->group) === false) {
-          return new BadRequest;
-      }
+        if (isset($request->JSON) === false || isset($request->JSON->group) === false) {
+            return new BadRequest;
+        }
 
       // Append one group in the acl
-      try {
-          $class = $this->getGroupClass();
-          $query = $this->getGroupQueryById($request->JSON->group);
-          $group = new $class($query);
-      }
-      catch(mongodb\Exception $e) {
-        return new BadRequest;
-      }
+        try {
+            $class = $this->getGroupClass();
+            $query = $this->getGroupQueryById($request->JSON->group);
+            $group = new $class($query);
+        } catch (mongodb\Exception $e) {
+            return new BadRequest;
+        }
 
-      $this->acl->addGroup($group);
-      $this->acl->save();
+        $this->acl->addGroup($group);
+        $this->acl->save();
 
-      return new Created;
+        return new Created;
     }
 }

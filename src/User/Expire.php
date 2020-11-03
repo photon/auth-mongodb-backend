@@ -25,8 +25,7 @@ class Expire extends APICommon
             $query = $this->getUserQueryById($userId);
             $class = $this->getUserClass();
             $this->user = new $class($query);
-        }
-        catch(mongodb\Exception $e) {
+        } catch (mongodb\Exception $e) {
             throw new \photon\views\APIJson\Exception\NotFound;
         }
     }
@@ -38,12 +37,12 @@ class Expire extends APICommon
         }
 
         try {
-          $date = new DateTime($request->JSON->expire);
-          if ($date === false) {
-              return new BadRequest;
-          }
-        } catch(\Exception $e) {
-          return new BadRequest;
+            $date = new DateTime($request->JSON->expire);
+            if ($date === false) {
+                return new BadRequest;
+            }
+        } catch (\Exception $e) {
+            return new BadRequest;
         }
 
         $this->user->setExpirationDate($date);

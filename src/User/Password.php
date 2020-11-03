@@ -28,8 +28,7 @@ class Password extends APICommon
             $query = $this->getUserQueryById($userId);
             $class = $this->getUserClass();
             $this->user = new $class($query);
-        }
-        catch(mongodb\Exception $e) {
+        } catch (mongodb\Exception $e) {
             throw new \photon\views\APIJson\Exception\NotFound;
         }
     }
@@ -41,36 +40,36 @@ class Password extends APICommon
      */
     public function PUT($request, $match)
     {
-      if ($this->userIsMe($request, $this->user) === false) {
-          if ($this->userIsAdmin($request) === false) {
-              throw new \photon\views\APIJson\Exception\Forbidden;
-          }
-      }
+        if ($this->userIsMe($request, $this->user) === false) {
+            if ($this->userIsAdmin($request) === false) {
+                throw new \photon\views\APIJson\Exception\Forbidden;
+            }
+        }
 
-      if (isset($request->JSON) === false || isset($request->JSON->password) === false) {
-          return new BadRequest;
-      }
+        if (isset($request->JSON) === false || isset($request->JSON->password) === false) {
+            return new BadRequest;
+        }
 
-      $password = $request->JSON->password;
+        $password = $request->JSON->password;
       // TODO: Hook password strength ?
 
-      $this->user->setPassword($password);
-      $this->user->save();
+        $this->user->setPassword($password);
+        $this->user->save();
 
-      return new NoContent;
+        return new NoContent;
     }
 
     /*
      *  Delete the user password
      *  Force him to use a password recover method
      */
-     public function DELETE($request, $match)
-     {
-       $this->ensureUserIsAdmin($request);
+    public function DELETE($request, $match)
+    {
+        $this->ensureUserIsAdmin($request);
 
-       $this->user->clearPassword();
-       $this->user->save();
+        $this->user->clearPassword();
+        $this->user->save();
 
-       return new NoContent;
-     }
+        return new NoContent;
+    }
 }

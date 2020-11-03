@@ -27,8 +27,7 @@ class Members extends APICommon
             $query = $this->getGroupQueryById($groupId);
             $class = $this->getGroupClass();
             $this->group = new $class($query);
-        }
-        catch(mongodb\Exception $e) {
+        } catch (mongodb\Exception $e) {
             throw new \photon\views\APIJson\Exception\NotFound;
         }
     }
@@ -38,23 +37,22 @@ class Members extends APICommon
      */
     public function POST($request, $match)
     {
-      if (isset($request->JSON) === false || isset($request->JSON->member) === false) {
-          return new BadRequest;
-      }
+        if (isset($request->JSON) === false || isset($request->JSON->member) === false) {
+            return new BadRequest;
+        }
 
       // Append one user in the group
-      try {
-          $class = $this->getUserClass();
-          $query = $this->getUserQueryById($request->JSON->member);
-          $user = new $class($query);
-      }
-      catch(mongodb\Exception $e) {
-        return new BadRequest;
-      }
+        try {
+            $class = $this->getUserClass();
+            $query = $this->getUserQueryById($request->JSON->member);
+            $user = new $class($query);
+        } catch (mongodb\Exception $e) {
+            return new BadRequest;
+        }
 
-      $this->group->addUser($user);
-      $this->group->save();
+        $this->group->addUser($user);
+        $this->group->save();
 
-      return new Created;
+        return new Created;
     }
 }

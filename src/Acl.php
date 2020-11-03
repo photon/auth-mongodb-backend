@@ -23,8 +23,7 @@ class Acl extends APICommon
             $query = $this->getAclQueryById($aclId);
             $class = $this->getAclClass();
             $this->acl = new $class($query);
-        }
-        catch(mongodb\Exception $e) {
+        } catch (mongodb\Exception $e) {
             throw new \photon\views\APIJson\Exception\NotFound;
         }
     }
@@ -40,9 +39,9 @@ class Acl extends APICommon
     /*
      *  Delete the acl
      */
-     public function DELETE($request, $match)
-     {
-         $this->acl->delete();
-         return new NoContent;
-     }
+    public function DELETE($request, $match)
+    {
+        $this->acl->delete();
+        return new NoContent;
+    }
 }

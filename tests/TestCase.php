@@ -38,7 +38,7 @@ class TestCase extends \photon\test\TestCase
         $endpoints = MongoDB\APICommon::getURLs();
         $error500 = array(
           'regex' => '#(.*)#',
-          'view' => function($request, $match) {
+          'view' => function ($request, $match) {
               throw new \photon\views\APIJson\Exception;
           },
         );
@@ -58,56 +58,56 @@ class TestCase extends \photon\test\TestCase
 
     protected function createAcl()
     {
-      $acl = new \photon\auth\MongoDBAcl;
-      $acl->setName('x86-64');
-      $acl->save();
+        $acl = new \photon\auth\MongoDBAcl;
+        $acl->setName('x86-64');
+        $acl->save();
 
-      $this->acl = $acl;
+        $this->acl = $acl;
     }
 
     protected function createGroup()
     {
-      $group = new \photon\auth\MongoDBGroup;
-      $group->setName('Mun');
-      $group->save();
+        $group = new \photon\auth\MongoDBGroup;
+        $group->setName('Mun');
+        $group->save();
 
-      $this->group = $group;
+        $this->group = $group;
     }
 
     protected function createUser()
     {
-      $user = new \photon\auth\MongoDBUser;
-      $user->setName('Mick Robot');
-      $user->setLogin('mr@exemple.com');
-      $user->setPassword('secret');
-      $user->save();
+        $user = new \photon\auth\MongoDBUser;
+        $user->setName('Mick Robot');
+        $user->setLogin('mr@exemple.com');
+        $user->setPassword('secret');
+        $user->save();
 
-      $this->user = $user;
+        $this->user = $user;
     }
 
     protected function createUser2()
     {
-      $user = new \photon\auth\MongoDBUser;
-      $user->setName('Cretinous Rabbit');
-      $user->setLogin('cr@exemple.com');
-      $user->setPassword('secret');
-      $user->save();
+        $user = new \photon\auth\MongoDBUser;
+        $user->setName('Cretinous Rabbit');
+        $user->setLogin('cr@exemple.com');
+        $user->setPassword('secret');
+        $user->save();
 
-      $this->user2 = $user;
+        $this->user2 = $user;
     }
 
     protected function createAdmin()
     {
-      $user = new \photon\auth\MongoDBUser;
-      $user->setName('John DOE');
-      $user->setLogin('jd@exemple.com');
-      $user->setPassword('strong');
-      $user->save();
+        $user = new \photon\auth\MongoDBUser;
+        $user->setName('John DOE');
+        $user->setLogin('jd@exemple.com');
+        $user->setPassword('strong');
+        $user->save();
 
-      $acl = new \photon\auth\MongoDBAcl(array('name' => 'admin-users'));
-      $acl->addUser($user);
-      $acl->save();
+        $acl = new \photon\auth\MongoDBAcl(array('name' => 'admin-users'));
+        $acl->addUser($user);
+        $acl->save();
 
-      $this->admin = $user;
+        $this->admin = $user;
     }
 }

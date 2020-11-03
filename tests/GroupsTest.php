@@ -44,48 +44,48 @@ class GroupsTest extends TestCase
 
     public function testCreateDeleteGroup()
     {
-      $dispatcher = new \photon\core\Dispatcher;
+        $dispatcher = new \photon\core\Dispatcher;
 
-      $this->createAdmin();
+        $this->createAdmin();
 
       // Create the group 'Jungler'
-      $payload = array(
+        $payload = array(
         'name' => 'Jungler'
-      );
-      $stream = fopen('data:text/plain;base64,' . base64_encode(json_encode($payload) . "\n"), 'rb');
-      $url = '/api/group';
-      $req = \photon\test\HTTP::baseRequest('POST', $url, null, $stream, array(), array('content-type' => 'application/json'));
-      $req->user = $this->admin;
-      list($req, $resp) = $dispatcher->dispatch($req);
-      $this->assertEquals(201, $resp->status_code);
-      $json = json_decode($resp->content);
-      $this->assertNotEquals(false, $json);
+        );
+        $stream = fopen('data:text/plain;base64,' . base64_encode(json_encode($payload) . "\n"), 'rb');
+        $url = '/api/group';
+        $req = \photon\test\HTTP::baseRequest('POST', $url, null, $stream, array(), array('content-type' => 'application/json'));
+        $req->user = $this->admin;
+        list($req, $resp) = $dispatcher->dispatch($req);
+        $this->assertEquals(201, $resp->status_code);
+        $json = json_decode($resp->content);
+        $this->assertNotEquals(false, $json);
 
       // Reload group (generate exception if do not exists)
-      $group = new \photon\auth\MongoDBGroup(array('name' => 'Jungler'));
+        $group = new \photon\auth\MongoDBGroup(array('name' => 'Jungler'));
 
       // Delete the group
-      $url = '/api/group/' . $group->getId();
-      $req = \photon\test\HTTP::baseRequest('DELETE', $url);
-      $req->user = $this->admin;
-      list($req, $resp) = $dispatcher->dispatch($req);
-      $this->assertEquals(204, $resp->status_code);
+        $url = '/api/group/' . $group->getId();
+        $req = \photon\test\HTTP::baseRequest('DELETE', $url);
+        $req->user = $this->admin;
+        list($req, $resp) = $dispatcher->dispatch($req);
+        $this->assertEquals(204, $resp->status_code);
     }
 
     public function testCreateGroupBadPayload()
     {
-      $dispatcher = new \photon\core\Dispatcher;
+        $dispatcher = new \photon\core\Dispatcher;
 
-      $this->createAdmin();
+        $this->createAdmin();
 
-      $payload = array(
+        $payload = array(
         'bad' => 'name'
-      );
-      $stream = fopen('data:text/plain;base64,' . base64_encode(json_encode($payload) . "\n"), 'rb');
-      $url = '/api/group';
-      $req = \photon\test\HTTP::baseRequest('POST', $url, null, $stream, array(), array('content-type' => 'application/json'));
-      $req->user = $this->admin;
-      list($req, $resp) = $dispatcher->dispatch($req);
-      $this->assertEquals(400, $resp->status_code);
+        );
+        $stream = fopen('data:text/plain;base64,' . base64_encode(json_encode($payload) . "\n"), 'rb');
+        $url = '/api/group';
+        $req = \photon\test\HTTP::baseRequest('POST', $url, null, $stream, array(), array('content-type' => 'application/json'));
+        $req->user = $this->admin;
+        list($req, $resp) = $dispatcher->dispatch($req);
+        $this->assertEquals(400, $resp->status_code);
     }
 }
