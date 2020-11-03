@@ -116,73 +116,73 @@ class APICommon extends APIJson\Rest
     {
       return array(
         /* User */
-        array('regex' => '#user/(\w+)/password#',
+        array('regex' => '#^user/(\w+)/password$#',
               'view' => array(User\Password::class, 'router'),
               'name' => 'api_user_password_view'),
 
-        array('regex' => '#user/(\w+)/block$#',
+        array('regex' => '#^user/(\w+)/block$#',
               'view' => array(User\Block::class, 'router'),
               'name' => 'api_user_block_view'),
 
-        array('regex' => '#user/(\w+)/expire#',
+        array('regex' => '#^user/(\w+)/expire$#',
               'view' => array(User\Expire::class, 'router'),
               'name' => 'api_user_expire_view'),
 
-        array('regex' => '#user/(\w+)/token/(\w+)#',
+        array('regex' => '#^user/(\w+)/token/(\w+)$#',
               'view' => array(User\Token::class, 'router'),
               'name' => 'api_user_tokens_view'),
 
-        array('regex' => '#user/(\w+)/token#',
+        array('regex' => '#^user/(\w+)/token$#',
               'view' => array(User\Tokens::class, 'router'),
               'name' => 'api_user_tokens_view'),
 
-        array('regex' => '#user/(\w+)#',
+        array('regex' => '#^user/(\w+)$#',
               'view' => array(User::class, 'router'),
               'name' => 'api_user_view'),
 
-        array('regex' => '#user$#',
+        array('regex' => '#^user$#',
               'view' => array(Users::class, 'router'),
               'name' => 'api_users_view'),
 
         /* Group */
-        array('regex' => '#group/(\w+)/member/(\w+)$#',
+        array('regex' => '#^group/(\w+)/member/(\w+)$#',
               'view' => array(Group\Member::class, 'router'),
               'name' => 'api_group_member_view'),
 
-        array('regex' => '#group/(\w+)/member$#',
+        array('regex' => '#^group/(\w+)/member$#',
               'view' => array(Group\Members::class, 'router'),
               'name' => 'api_group_members_view'),
 
-        array('regex' => '#group/(\w+)$#',
+        array('regex' => '#^group/(\w+)$#',
               'view' => array(Group::class, 'router'),
               'name' => 'api_group_view'),
 
-        array('regex' => '#group$#',
+        array('regex' => '#^group$#',
               'view' => array(Groups::class, 'router'),
               'name' => 'api_groups_view'),
 
         /* ACL */
-        array('regex' => '#acl/(\w+)/group/(\w+)$#',
+        array('regex' => '#^acl/(\w+)/group/(\w+)$#',
               'view' => array(Acl\Group::class, 'router'),
               'name' => 'api_acl_group_view'),
 
-        array('regex' => '#acl/(\w+)/group$#',
+        array('regex' => '#^acl/(\w+)/group$#',
               'view' => array(Acl\Groups::class, 'router'),
               'name' => 'api_acl_groups_view'),
 
-        array('regex' => '#acl/(\w+)/member/(\w+)$#',
+        array('regex' => '#^acl/(\w+)/member/(\w+)$#',
               'view' => array(Acl\Member::class, 'router'),
               'name' => 'api_acl_member_view'),
 
-        array('regex' => '#acl/(\w+)/member$#',
+        array('regex' => '#^acl/(\w+)/member$#',
               'view' => array(Acl\Members::class, 'router'),
               'name' => 'api_acl_members_view'),
 
-        array('regex' => '#acl/(\w+)$#',
+        array('regex' => '#^acl/(\w+)$#',
               'view' => array(Acl::class, 'router'),
               'name' => 'api_acl_view'),
 
-        array('regex' => '#acl$#',
+        array('regex' => '#^acl$#',
               'view' => array(Acls::class, 'router'),
               'name' => 'api_acls_view'),
       );

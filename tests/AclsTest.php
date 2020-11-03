@@ -8,19 +8,6 @@ use photon\auth\MongoDBBackend;
 
 class AclsTest extends TestCase
 {
-    public function testUnknownAcl()
-    {
-      $dispatcher = new \photon\core\Dispatcher;
-
-      $this->createAdmin();
-
-      $req = \photon\test\HTTP::baseRequest('GET', '/api/acl/5f92f0e9fde8b71d307d703b');
-      $req->user = $this->admin;
-      list($req, $resp) = $dispatcher->dispatch($req);
-      file_put_contents('/tmp/a.html', $resp->content);
-      $this->assertEquals(404, $resp->status_code);
-    }
-
     public function testListAclsNotConnected()
     {
       $dispatcher = new \photon\core\Dispatcher;

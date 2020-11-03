@@ -1,18 +1,18 @@
 <?php
 
-namespace tests\Group;
+namespace tests\Acl;
 
 use \photon\config\Container as Conf;
 
 class MembersTest extends \tests\TestCase
 {
-    public function testUnknownGroup()
+    public function testUnknownAcl()
     {
       $dispatcher = new \photon\core\Dispatcher;
 
       $this->createAdmin();
 
-      $req = \photon\test\HTTP::baseRequest('POST', '/api/group/5f92f0e9fde8b71d307d703b/member');
+      $req = \photon\test\HTTP::baseRequest('POST', '/api/acl/5f92f0e9fde8b71d307d703b/member');
       $req->user = $this->admin;
       list($req, $resp) = $dispatcher->dispatch($req);
       $this->assertEquals(404, $resp->status_code);
@@ -23,9 +23,9 @@ class MembersTest extends \tests\TestCase
       $dispatcher = new \photon\core\Dispatcher;
 
       $this->createAdmin();
-      $this->createGroup();
+      $this->createAcl();
 
-      $req = \photon\test\HTTP::baseRequest('POST', '/api/group/' . $this->group->getId() . '/member');
+      $req = \photon\test\HTTP::baseRequest('POST', '/api/acl/' . $this->acl->getId() . '/member');
       $req->user = $this->admin;
       list($req, $resp) = $dispatcher->dispatch($req);
       $this->assertEquals(400, $resp->status_code);
@@ -36,13 +36,13 @@ class MembersTest extends \tests\TestCase
       $dispatcher = new \photon\core\Dispatcher;
 
       $this->createAdmin();
-      $this->createGroup();
+      $this->createAcl();
 
       $payload = array(
         'my' => 'bad'
       );
       $stream = fopen('data:text/plain;base64,' . base64_encode(json_encode($payload) . "\n"), 'rb');
-      $url = '/api/group/' . $this->group->getId() . '/member';
+      $url = '/api/acl/' . $this->acl->getId() . '/member';
       $req = \photon\test\HTTP::baseRequest('POST', $url, null, $stream, array(), array('content-type' => 'application/json'));
       $req->user = $this->admin;
       list($req, $resp) = $dispatcher->dispatch($req);
@@ -54,13 +54,13 @@ class MembersTest extends \tests\TestCase
       $dispatcher = new \photon\core\Dispatcher;
 
       $this->createAdmin();
-      $this->createGroup();
+      $this->createAcl();
 
       $payload = array(
         'member' => '5f92f0e9fde8b71d307d0000',
       );
       $stream = fopen('data:text/plain;base64,' . base64_encode(json_encode($payload) . "\n"), 'rb');
-      $url = '/api/group/' . $this->group->getId() . '/member';
+      $url = '/api/acl/' . $this->acl->getId() . '/member';
       $req = \photon\test\HTTP::baseRequest('POST', $url, null, $stream, array(), array('content-type' => 'application/json'));
       $req->user = $this->admin;
       list($req, $resp) = $dispatcher->dispatch($req);
@@ -73,19 +73,19 @@ class MembersTest extends \tests\TestCase
 
       $this->createAdmin();
       $this->createUser();
-      $this->createGroup();
+      $this->createAcl();
 
       $payload = array(
         'member' => (string) $this->user->getId(),
       );
       $stream = fopen('data:text/plain;base64,' . base64_encode(json_encode($payload) . "\n"), 'rb');
-      $url = '/api/group/' . $this->group->getId() . '/member';
+      $url = '/api/acl/' . $this->acl->getId() . '/member';
       $req = \photon\test\HTTP::baseRequest('POST', $url, null, $stream, array(), array('content-type' => 'application/json'));
       $req->user = $this->admin;
       list($req, $resp) = $dispatcher->dispatch($req);
       $this->assertEquals(201, $resp->status_code);
 
-      $this->group->reload();
-      $this->assertEquals(1, count($this->group->getUsers()));
+      $this->acl->reload();
+      $this->assertEquals(1, count($this->acl->getUsers()));
     }
 }

@@ -1,18 +1,18 @@
 <?php
 
-namespace tests\Group;
+namespace tests\Acl;
 
 use \photon\config\Container as Conf;
 
 class MemberTest extends \tests\TestCase
 {
-    public function testUnknownGroup()
+    public function testUnknownAcl()
     {
       $dispatcher = new \photon\core\Dispatcher;
 
       $this->createAdmin();
 
-      $url = '/api/group/5f92f0e9fde8b71d307d703b/member/5f92f0e9fde8b71d307d703b';
+      $url = '/api/acl/5f92f0e9fde8b71d307d703b/member/5f92f0e9fde8b71d307d703b';
       $req = \photon\test\HTTP::baseRequest('DELETE', $url);
       $req->user = $this->admin;
       list($req, $resp) = $dispatcher->dispatch($req);
@@ -24,9 +24,9 @@ class MemberTest extends \tests\TestCase
       $dispatcher = new \photon\core\Dispatcher;
 
       $this->createAdmin();
-      $this->createGroup();
+      $this->createAcl();
 
-      $url = '/api/group/' . $this->group->getId() . '/member/5f92f0e9fde8b71d307d703b';
+      $url = '/api/acl/' . $this->acl->getId() . '/member/5f92f0e9fde8b71d307d703b';
       $req = \photon\test\HTTP::baseRequest('DELETE', $url);
       $req->user = $this->admin;
       list($req, $resp) = $dispatcher->dispatch($req);
@@ -39,12 +39,12 @@ class MemberTest extends \tests\TestCase
 
       $this->createAdmin();
       $this->createUser();
-      $this->createGroup();
+      $this->createAcl();
 
-      $this->group->addUser($this->user);
-      $this->group->save();
+      $this->acl->addUser($this->user);
+      $this->acl->save();
 
-      $url = '/api/group/' . $this->group->getId() . '/member/' . $this->user->getId();
+      $url = '/api/acl/' . $this->acl->getId() . '/member/' . $this->user->getId();
       $req = \photon\test\HTTP::baseRequest('DELETE', $url);
       $req->user = $this->admin;
       list($req, $resp) = $dispatcher->dispatch($req);

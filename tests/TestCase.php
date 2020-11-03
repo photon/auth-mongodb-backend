@@ -9,6 +9,7 @@ use photon\auth\MongoDBBackend;
 
 class TestCase extends \photon\test\TestCase
 {
+    protected $acl = null;
     protected $group = null;
     protected $admin = null;
     protected $user = null;
@@ -25,18 +26,43 @@ class TestCase extends \photon\test\TestCase
         // Install indexes
         MongoDBBackend::createIndex();
 
-        // Install API endpoints
-        $urls = Conf::f('urls', array());
-        $urls[] = array(
-          'regex' => '#^/api#',
-          'sub' => MongoDB\APICommon::getURLs(),
-        );
-        Conf::set('urls', $urls);
-
         // Install ACL
         MongoDBAcl::ensureExists(array(
           'admin-users',
         ));
+
+        // Install endpoints
+        $urls = Conf::f('urls', array());
+
+        // Install API and append error 500 on unknown API
+        $endpoints = MongoDB\APICommon::getURLs();
+        $error500 = array(
+          'regex' => '#(.*)#',
+          'view' => function($request, $match) {
+              throw new \photon\views\APIJson\Exception;
+          },
+        );
+        $endpoints[] = $error500;
+
+        $urls[] = array(
+          'regex' => '#^/api/#',
+          'sub' => $endpoints,
+        );
+
+        // Catch all other requets to avoid 404 automatic responses
+        // We have real 404 answer to be tested
+        $urls[] = $error500;
+
+        Conf::set('urls', $urls);
+    }
+
+    protected function createAcl()
+    {
+      $acl = new \photon\auth\MongoDBAcl;
+      $acl->setName('x86-64');
+      $acl->save();
+
+      $this->acl = $acl;
     }
 
     protected function createGroup()
