@@ -1,5 +1,12 @@
-<phpunit colors="true"
-         bootstrap="vendor/photon/photon/src/photon/testbootstrap.php"
+<phpunit
+  backupGlobals="false"
+  backupStaticAttributes="false"
+  bootstrap="vendor/photon/photon/src/photon/testbootstrap.php"
+  colors="true"
+  convertErrorsToExceptions="true"
+  convertNoticesToExceptions="true"
+  convertWarningsToExceptions="true"
+  stopOnFailure="false"
 >
     <testsuites>
         <testsuite name="Auth MongoDB Backend Tests">
