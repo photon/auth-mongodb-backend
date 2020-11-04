@@ -14,7 +14,7 @@ class Expire extends APICommon
 
     private $user = null;
 
-    protected function hookBeforeRequest($request, $match)
+    protected function hookBeforeRequest($request, $match) : void
     {
         $this->ensureUserIsConnected($request);
         $this->ensureUserIsAdmin($request);
@@ -38,9 +38,6 @@ class Expire extends APICommon
 
         try {
             $date = new DateTime($request->JSON->expire);
-            if ($date === false) {
-                return new BadRequest;
-            }
         } catch (\Exception $e) {
             return new BadRequest;
         }

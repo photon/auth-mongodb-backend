@@ -6,7 +6,7 @@ use \photon\config\Container as Conf;
 
 class GroupsTest extends \tests\TestCase
 {
-    public function testUnknownAcl()
+    public function testUnknownAcl() : void
     {
         $dispatcher = new \photon\core\Dispatcher;
 
@@ -15,10 +15,10 @@ class GroupsTest extends \tests\TestCase
         $req = \photon\test\HTTP::baseRequest('POST', '/api/acl/5f92f0e9fde8b71d307d703b/group');
         $req->user = $this->admin;
         list($req, $resp) = $dispatcher->dispatch($req);
-        $this->assertEquals(404, $resp->status_code);
+        static::assertEquals(404, $resp->status_code);
     }
 
-    public function testAddGroupNoPayload()
+    public function testAddGroupNoPayload() : void
     {
         $dispatcher = new \photon\core\Dispatcher;
 
@@ -28,10 +28,10 @@ class GroupsTest extends \tests\TestCase
         $req = \photon\test\HTTP::baseRequest('POST', '/api/acl/' . $this->acl->getId() . '/group');
         $req->user = $this->admin;
         list($req, $resp) = $dispatcher->dispatch($req);
-        $this->assertEquals(400, $resp->status_code);
+        static::assertEquals(400, $resp->status_code);
     }
 
-    public function testAddGroupBadPayload()
+    public function testAddGroupBadPayload() : void
     {
         $dispatcher = new \photon\core\Dispatcher;
 
@@ -46,10 +46,10 @@ class GroupsTest extends \tests\TestCase
         $req = \photon\test\HTTP::baseRequest('POST', $url, null, $stream, array(), array('content-type' => 'application/json'));
         $req->user = $this->admin;
         list($req, $resp) = $dispatcher->dispatch($req);
-        $this->assertEquals(400, $resp->status_code);
+        static::assertEquals(400, $resp->status_code);
     }
 
-    public function testAddUnkownGroup()
+    public function testAddUnkownGroup() : void
     {
         $dispatcher = new \photon\core\Dispatcher;
 
@@ -64,10 +64,10 @@ class GroupsTest extends \tests\TestCase
         $req = \photon\test\HTTP::baseRequest('POST', $url, null, $stream, array(), array('content-type' => 'application/json'));
         $req->user = $this->admin;
         list($req, $resp) = $dispatcher->dispatch($req);
-        $this->assertEquals(400, $resp->status_code);
+        static::assertEquals(400, $resp->status_code);
     }
 
-    public function testAddGroup()
+    public function testAddGroup() : void
     {
         $dispatcher = new \photon\core\Dispatcher;
 
@@ -83,9 +83,9 @@ class GroupsTest extends \tests\TestCase
         $req = \photon\test\HTTP::baseRequest('POST', $url, null, $stream, array(), array('content-type' => 'application/json'));
         $req->user = $this->admin;
         list($req, $resp) = $dispatcher->dispatch($req);
-        $this->assertEquals(201, $resp->status_code);
+        static::assertEquals(201, $resp->status_code);
 
         $this->acl->reload();
-        $this->assertEquals(1, count($this->acl->getGroups()));
+        static::assertEquals(1, count($this->acl->getGroups()));
     }
 }

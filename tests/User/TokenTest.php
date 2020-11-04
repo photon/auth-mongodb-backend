@@ -8,7 +8,7 @@ use photon\auth\MongoDBUserToken;
 
 class TokenTest extends \tests\TestCase
 {
-    public function testReadToken()
+    public function testReadToken() : void
     {
         $dispatcher = new \photon\core\Dispatcher;
 
@@ -22,10 +22,10 @@ class TokenTest extends \tests\TestCase
         $req = \photon\test\HTTP::baseRequest('GET', '/api/user/' . $this->admin->getId() . '/token/' . $token->getId());
         $req->user = $this->admin;
         list($req, $resp) = $dispatcher->dispatch($req);
-        $this->assertEquals(200, $resp->status_code);
+        static::assertEquals(200, $resp->status_code);
     }
 
-    public function testUnknownToken()
+    public function testUnknownToken() : void
     {
         $dispatcher = new \photon\core\Dispatcher;
 
@@ -34,10 +34,10 @@ class TokenTest extends \tests\TestCase
         $req = \photon\test\HTTP::baseRequest('GET', '/api/user/' . $this->admin->getId() . '/token/5f92f0e9fde8b71d307d703b');
         $req->user = $this->admin;
         list($req, $resp) = $dispatcher->dispatch($req);
-        $this->assertEquals(404, $resp->status_code);
+        static::assertEquals(404, $resp->status_code);
     }
 
-    public function testUnknownUser()
+    public function testUnknownUser() : void
     {
         $dispatcher = new \photon\core\Dispatcher;
 
@@ -46,10 +46,10 @@ class TokenTest extends \tests\TestCase
         $req = \photon\test\HTTP::baseRequest('GET', '/api/user/5f92f0e9fde0000d307d703b/token/5f92f0e9fde8b71d307d703b');
         $req->user = $this->admin;
         list($req, $resp) = $dispatcher->dispatch($req);
-        $this->assertEquals(404, $resp->status_code);
+        static::assertEquals(404, $resp->status_code);
     }
 
-    public function testForbiddenAccess()
+    public function testForbiddenAccess() : void
     {
         $dispatcher = new \photon\core\Dispatcher;
 
@@ -64,6 +64,6 @@ class TokenTest extends \tests\TestCase
         $req = \photon\test\HTTP::baseRequest('GET', '/api/user/' . $this->admin->getId() . '/token/' . $token->getId());
         $req->user = $this->user;
         list($req, $resp) = $dispatcher->dispatch($req);
-        $this->assertEquals(403, $resp->status_code);
+        static::assertEquals(403, $resp->status_code);
     }
 }

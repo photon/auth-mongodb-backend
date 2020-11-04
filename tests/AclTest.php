@@ -6,7 +6,7 @@ use photon\config\Container as Conf;
 
 class AclTest extends TestCase
 {
-    public function testUnknownAcl()
+    public function testUnknownAcl() : void
     {
         $dispatcher = new \photon\core\Dispatcher;
 
@@ -16,10 +16,10 @@ class AclTest extends TestCase
         $req->user = $this->admin;
         list($req, $resp) = $dispatcher->dispatch($req);
         file_put_contents('/tmp/a.html', $resp->content);
-        $this->assertEquals(404, $resp->status_code);
+        static::assertEquals(404, $resp->status_code);
     }
 
-    public function testReadAcl()
+    public function testReadAcl() : void
     {
         $dispatcher = new \photon\core\Dispatcher;
 
@@ -28,12 +28,12 @@ class AclTest extends TestCase
         $acl = new \photon\auth\MongoDBAcl;
         $acl->setName('Testing');
         $acl->save();
-      
+
         $req = \photon\test\HTTP::baseRequest('GET', '/api/acl/' . $acl->getId());
         $req->user = $this->admin;
         list($req, $resp) = $dispatcher->dispatch($req);
-        $this->assertEquals(200, $resp->status_code);
+        static::assertEquals(200, $resp->status_code);
         $json = json_decode($resp->content);
-        $this->assertNotEquals(false, $json);
+        static::assertNotEquals(false, $json);
     }
 }

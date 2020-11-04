@@ -8,14 +8,14 @@ use photon\auth\MongoDBBackend;
 
 class UsersTest extends TestCase
 {
-    public function testListUsers()
+    public function testListUsers() : void
     {
         $dispatcher = new \photon\core\Dispatcher;
 
         // List users on an empty database (not connected)
         $req = \photon\test\HTTP::baseRequest('GET', '/api/user');
         list($req, $resp) = $dispatcher->dispatch($req);
-        $this->assertEquals(403, $resp->status_code);
+        static::assertEquals(403, $resp->status_code);
 
         // Create an user
         $user1 = new \photon\auth\MongoDBUser;
@@ -28,7 +28,7 @@ class UsersTest extends TestCase
         $req = \photon\test\HTTP::baseRequest('GET', '/api/user');
         $req->user = $user1;
         list($req, $resp) = $dispatcher->dispatch($req);
-        $this->assertEquals(403, $resp->status_code);
+        static::assertEquals(403, $resp->status_code);
 
         // Grant admin role to the user
         $acl = new \photon\auth\MongoDBAcl(array('name' => 'admin-users'));
@@ -39,10 +39,10 @@ class UsersTest extends TestCase
         $req = \photon\test\HTTP::baseRequest('GET', '/api/user');
         $req->user = $user1;
         list($req, $resp) = $dispatcher->dispatch($req);
-        $this->assertEquals(200, $resp->status_code);
+        static::assertEquals(200, $resp->status_code);
         $json = json_decode($resp->content);
-        $this->assertNotEquals(false, $json);
-        $this->assertEquals(1, count($json));
+        static::assertNotEquals(false, $json);
+        static::assertEquals(1, count($json));
 
         // Create a second user
         $user2 = new \photon\auth\MongoDBUser;
@@ -55,14 +55,14 @@ class UsersTest extends TestCase
         $req = \photon\test\HTTP::baseRequest('GET', '/api/user');
         $req->user = $user1;
         list($req, $resp) = $dispatcher->dispatch($req);
-        $this->assertEquals(200, $resp->status_code);
+        static::assertEquals(200, $resp->status_code);
         $json = json_decode($resp->content);
-        $this->assertNotEquals(false, $json);
-        $this->assertEquals(2, count($json));
+        static::assertNotEquals(false, $json);
+        static::assertEquals(2, count($json));
     }
 
 
-    public function testCreateDeleteUser()
+    public function testCreateDeleteUser() : void
     {
         $dispatcher = new \photon\core\Dispatcher;
 
@@ -78,9 +78,9 @@ class UsersTest extends TestCase
         $req = \photon\test\HTTP::baseRequest('POST', $url, null, $stream, array(), array('content-type' => 'application/json'));
         $req->user = $this->admin;
         list($req, $resp) = $dispatcher->dispatch($req);
-        $this->assertEquals(201, $resp->status_code);
+        static::assertEquals(201, $resp->status_code);
         $json = json_decode($resp->content);
-        $this->assertNotEquals(false, $json);
+        static::assertNotEquals(false, $json);
 
       // Reload user (generate exception if do not exists)
         $config = MongoDBBackend::getConfig();
@@ -90,18 +90,18 @@ class UsersTest extends TestCase
         $req = \photon\test\HTTP::baseRequest('GET', '/api/user/' . $user->getId());
         $req->user = $this->admin;
         list($req, $resp) = $dispatcher->dispatch($req);
-        $this->assertEquals(200, $resp->status_code);
+        static::assertEquals(200, $resp->status_code);
         $json = json_decode($resp->content);
-        $this->assertNotEquals(false, $json);
+        static::assertNotEquals(false, $json);
 
       // Delete the user
         $req = \photon\test\HTTP::baseRequest('DELETE', '/api/user/' . $user->getId());
         $req->user = $this->admin;
         list($req, $resp) = $dispatcher->dispatch($req);
-        $this->assertEquals(204, $resp->status_code);
+        static::assertEquals(204, $resp->status_code);
     }
 
-    public function testCreateUserBadPayload()
+    public function testCreateUserBadPayload() : void
     {
         $dispatcher = new \photon\core\Dispatcher;
 
@@ -115,6 +115,6 @@ class UsersTest extends TestCase
         $req = \photon\test\HTTP::baseRequest('POST', $url, null, $stream, array(), array('content-type' => 'application/json'));
         $req->user = $this->admin;
         list($req, $resp) = $dispatcher->dispatch($req);
-        $this->assertEquals(400, $resp->status_code);
+        static::assertEquals(400, $resp->status_code);
     }
 }

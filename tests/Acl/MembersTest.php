@@ -6,7 +6,7 @@ use \photon\config\Container as Conf;
 
 class MembersTest extends \tests\TestCase
 {
-    public function testUnknownAcl()
+    public function testUnknownAcl() : void
     {
         $dispatcher = new \photon\core\Dispatcher;
 
@@ -15,10 +15,10 @@ class MembersTest extends \tests\TestCase
         $req = \photon\test\HTTP::baseRequest('POST', '/api/acl/5f92f0e9fde8b71d307d703b/member');
         $req->user = $this->admin;
         list($req, $resp) = $dispatcher->dispatch($req);
-        $this->assertEquals(404, $resp->status_code);
+        static::assertEquals(404, $resp->status_code);
     }
 
-    public function testAddMemberNoPayload()
+    public function testAddMemberNoPayload() : void
     {
         $dispatcher = new \photon\core\Dispatcher;
 
@@ -28,10 +28,10 @@ class MembersTest extends \tests\TestCase
         $req = \photon\test\HTTP::baseRequest('POST', '/api/acl/' . $this->acl->getId() . '/member');
         $req->user = $this->admin;
         list($req, $resp) = $dispatcher->dispatch($req);
-        $this->assertEquals(400, $resp->status_code);
+        static::assertEquals(400, $resp->status_code);
     }
 
-    public function testAddMemberBadPayload()
+    public function testAddMemberBadPayload() : void
     {
         $dispatcher = new \photon\core\Dispatcher;
 
@@ -46,10 +46,10 @@ class MembersTest extends \tests\TestCase
         $req = \photon\test\HTTP::baseRequest('POST', $url, null, $stream, array(), array('content-type' => 'application/json'));
         $req->user = $this->admin;
         list($req, $resp) = $dispatcher->dispatch($req);
-        $this->assertEquals(400, $resp->status_code);
+        static::assertEquals(400, $resp->status_code);
     }
 
-    public function testAddUnkownMember()
+    public function testAddUnkownMember() : void
     {
         $dispatcher = new \photon\core\Dispatcher;
 
@@ -64,10 +64,10 @@ class MembersTest extends \tests\TestCase
         $req = \photon\test\HTTP::baseRequest('POST', $url, null, $stream, array(), array('content-type' => 'application/json'));
         $req->user = $this->admin;
         list($req, $resp) = $dispatcher->dispatch($req);
-        $this->assertEquals(400, $resp->status_code);
+        static::assertEquals(400, $resp->status_code);
     }
 
-    public function testAddMember()
+    public function testAddMember() : void
     {
         $dispatcher = new \photon\core\Dispatcher;
 
@@ -83,9 +83,9 @@ class MembersTest extends \tests\TestCase
         $req = \photon\test\HTTP::baseRequest('POST', $url, null, $stream, array(), array('content-type' => 'application/json'));
         $req->user = $this->admin;
         list($req, $resp) = $dispatcher->dispatch($req);
-        $this->assertEquals(201, $resp->status_code);
+        static::assertEquals(201, $resp->status_code);
 
         $this->acl->reload();
-        $this->assertEquals(1, count($this->acl->getUsers()));
+        static::assertEquals(1, count($this->acl->getUsers()));
     }
 }

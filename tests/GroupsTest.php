@@ -7,14 +7,14 @@ use \photon\auth\api\MongoDB;
 
 class GroupsTest extends TestCase
 {
-    public function testListGroups()
+    public function testListGroups() : void
     {
         $dispatcher = new \photon\core\Dispatcher;
 
         // List groups on an empty database (not connected)
         $req = \photon\test\HTTP::baseRequest('GET', '/api/group');
         list($req, $resp) = $dispatcher->dispatch($req);
-        $this->assertEquals(403, $resp->status_code);
+        static::assertEquals(403, $resp->status_code);
 
         $this->createAdmin();
 
@@ -22,10 +22,10 @@ class GroupsTest extends TestCase
         $req = \photon\test\HTTP::baseRequest('GET', '/api/group');
         $req->user = $this->admin;
         list($req, $resp) = $dispatcher->dispatch($req);
-        $this->assertEquals(200, $resp->status_code);
+        static::assertEquals(200, $resp->status_code);
         $json = json_decode($resp->content);
-        $this->assertNotEquals(false, $json);
-        $this->assertEquals(0, count($json));
+        static::assertNotEquals(false, $json);
+        static::assertEquals(0, count($json));
 
         // Create a group
         $group = new \photon\auth\MongoDBGroup;
@@ -36,13 +36,13 @@ class GroupsTest extends TestCase
         $req = \photon\test\HTTP::baseRequest('GET', '/api/group');
         $req->user = $this->admin;
         list($req, $resp) = $dispatcher->dispatch($req);
-        $this->assertEquals(200, $resp->status_code);
+        static::assertEquals(200, $resp->status_code);
         $json = json_decode($resp->content);
-        $this->assertNotEquals(false, $json);
-        $this->assertEquals(1, count($json));
+        static::assertNotEquals(false, $json);
+        static::assertEquals(1, count($json));
     }
 
-    public function testCreateDeleteGroup()
+    public function testCreateDeleteGroup() : void
     {
         $dispatcher = new \photon\core\Dispatcher;
 
@@ -57,9 +57,9 @@ class GroupsTest extends TestCase
         $req = \photon\test\HTTP::baseRequest('POST', $url, null, $stream, array(), array('content-type' => 'application/json'));
         $req->user = $this->admin;
         list($req, $resp) = $dispatcher->dispatch($req);
-        $this->assertEquals(201, $resp->status_code);
+        static::assertEquals(201, $resp->status_code);
         $json = json_decode($resp->content);
-        $this->assertNotEquals(false, $json);
+        static::assertNotEquals(false, $json);
 
       // Reload group (generate exception if do not exists)
         $group = new \photon\auth\MongoDBGroup(array('name' => 'Jungler'));
@@ -69,10 +69,10 @@ class GroupsTest extends TestCase
         $req = \photon\test\HTTP::baseRequest('DELETE', $url);
         $req->user = $this->admin;
         list($req, $resp) = $dispatcher->dispatch($req);
-        $this->assertEquals(204, $resp->status_code);
+        static::assertEquals(204, $resp->status_code);
     }
 
-    public function testCreateGroupBadPayload()
+    public function testCreateGroupBadPayload() : void
     {
         $dispatcher = new \photon\core\Dispatcher;
 
@@ -86,6 +86,6 @@ class GroupsTest extends TestCase
         $req = \photon\test\HTTP::baseRequest('POST', $url, null, $stream, array(), array('content-type' => 'application/json'));
         $req->user = $this->admin;
         list($req, $resp) = $dispatcher->dispatch($req);
-        $this->assertEquals(400, $resp->status_code);
+        static::assertEquals(400, $resp->status_code);
     }
 }

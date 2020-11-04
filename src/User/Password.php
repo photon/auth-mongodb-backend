@@ -18,7 +18,7 @@ class Password extends APICommon
 
     private $user = null;
 
-    protected function hookBeforeRequest($request, $match)
+    protected function hookBeforeRequest($request, $match) : void
     {
         $this->ensureUserIsConnected($request);
 

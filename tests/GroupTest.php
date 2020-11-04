@@ -8,7 +8,7 @@ use \photon\auth\api\MongoDB;
 class GroupTest extends TestCase
 {
 
-    public function testUnknownGroup()
+    public function testUnknownGroup() : void
     {
         $dispatcher = new \photon\core\Dispatcher;
 
@@ -17,10 +17,10 @@ class GroupTest extends TestCase
         $req = \photon\test\HTTP::baseRequest('GET', '/api/group/5f92f0e9fde8b71d307d703b');
         $req->user = $this->admin;
         list($req, $resp) = $dispatcher->dispatch($req);
-        $this->assertEquals(404, $resp->status_code);
+        static::assertEquals(404, $resp->status_code);
     }
 
-    public function testReadGroup()
+    public function testReadGroup() : void
     {
         $dispatcher = new \photon\core\Dispatcher;
 
@@ -30,8 +30,8 @@ class GroupTest extends TestCase
         $req = \photon\test\HTTP::baseRequest('GET', '/api/group/' . $this->group->getId());
         $req->user = $this->admin;
         list($req, $resp) = $dispatcher->dispatch($req);
-        $this->assertEquals(200, $resp->status_code);
+        static::assertEquals(200, $resp->status_code);
         $json = json_decode($resp->content);
-        $this->assertNotEquals(false, $json);
+        static::assertNotEquals(false, $json);
     }
 }

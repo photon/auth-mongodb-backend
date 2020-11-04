@@ -8,7 +8,7 @@ use photon\auth\MongoDBUserToken;
 
 class TokensTest extends \tests\TestCase
 {
-    public function testUnknownUser()
+    public function testUnknownUser() : void
     {
         $dispatcher = new \photon\core\Dispatcher;
 
@@ -17,10 +17,10 @@ class TokensTest extends \tests\TestCase
         $req = \photon\test\HTTP::baseRequest('GET', '/api/user/5f92f0e00000000d307d703b/token');
         $req->user = $this->admin;
         list($req, $resp) = $dispatcher->dispatch($req);
-        $this->assertEquals(404, $resp->status_code);
+        static::assertEquals(404, $resp->status_code);
     }
 
-    public function testListToken()
+    public function testListToken() : void
     {
         $dispatcher = new \photon\core\Dispatcher;
 
@@ -31,10 +31,10 @@ class TokensTest extends \tests\TestCase
         $req = \photon\test\HTTP::baseRequest('GET', '/api/user/' . $this->user->getId() . '/token');
         $req->user = $this->user;
         list($req, $resp) = $dispatcher->dispatch($req);
-        $this->assertEquals(200, $resp->status_code);
+        static::assertEquals(200, $resp->status_code);
         $json = json_decode($resp->content);
-        $this->assertNotEquals(false, $json);
-        $this->assertEquals(0, count($json));
+        static::assertNotEquals(false, $json);
+        static::assertEquals(0, count($json));
 
       // Create a token
         $token = new MongoDBUserToken;
@@ -46,22 +46,22 @@ class TokensTest extends \tests\TestCase
         $req = \photon\test\HTTP::baseRequest('GET', '/api/user/' . $this->user->getId() . '/token');
         $req->user = $this->user;
         list($req, $resp) = $dispatcher->dispatch($req);
-        $this->assertEquals(200, $resp->status_code);
+        static::assertEquals(200, $resp->status_code);
         $json = json_decode($resp->content);
-        $this->assertNotEquals(false, $json);
-        $this->assertEquals(1, count($json));
+        static::assertNotEquals(false, $json);
+        static::assertEquals(1, count($json));
 
       // List another user tokens (connected as admin)
         $req = \photon\test\HTTP::baseRequest('GET', '/api/user/' . $this->admin->getId() . '/token');
         $req->user = $this->admin;
         list($req, $resp) = $dispatcher->dispatch($req);
-        $this->assertEquals(200, $resp->status_code);
+        static::assertEquals(200, $resp->status_code);
         $json = json_decode($resp->content);
-        $this->assertNotEquals(false, $json);
-        $this->assertEquals(0, count($json));
+        static::assertNotEquals(false, $json);
+        static::assertEquals(0, count($json));
     }
 
-    public function testListTokenOfAnother()
+    public function testListTokenOfAnother() : void
     {
         $dispatcher = new \photon\core\Dispatcher;
 
@@ -72,10 +72,10 @@ class TokensTest extends \tests\TestCase
         $req = \photon\test\HTTP::baseRequest('GET', '/api/user/' . $this->admin->getId() . '/token');
         $req->user = $this->user;
         list($req, $resp) = $dispatcher->dispatch($req);
-        $this->assertEquals(403, $resp->status_code);
+        static::assertEquals(403, $resp->status_code);
     }
 
-    public function testCreateToken()
+    public function testCreateToken() : void
     {
         $dispatcher = new \photon\core\Dispatcher;
 
@@ -85,7 +85,7 @@ class TokensTest extends \tests\TestCase
         $count = MongoDBUserToken::count(array(
         'user' => $this->user->getId()
         ));
-        $this->assertEquals(0, $count);
+        static::assertEquals(0, $count);
 
       // Create a token
         $payload = array(
@@ -96,16 +96,16 @@ class TokensTest extends \tests\TestCase
         $req = \photon\test\HTTP::baseRequest('POST', $url, null, $stream, array(), array('content-type' => 'application/json'));
         $req->user = $this->user;
         list($req, $resp) = $dispatcher->dispatch($req);
-        $this->assertEquals(201, $resp->status_code);
+        static::assertEquals(201, $resp->status_code);
 
       // Ensure one token is created for this user
         $count = MongoDBUserToken::count(array(
         'user' => $this->user->getId()
         ));
-        $this->assertEquals(1, $count);
+        static::assertEquals(1, $count);
     }
 
-    public function testDeleteToken()
+    public function testDeleteToken() : void
     {
         $dispatcher = new \photon\core\Dispatcher;
 
@@ -122,22 +122,22 @@ class TokensTest extends \tests\TestCase
         $count = MongoDBUserToken::count(array(
         'user' => $this->user->getId()
         ));
-        $this->assertEquals(1, $count);
+        static::assertEquals(1, $count);
 
       // Delete it
         $req = \photon\test\HTTP::baseRequest('DELETE', '/api/user/' . $this->user->getId() . '/token/' . $tokenId);
         $req->user = $this->user;
         list($req, $resp) = $dispatcher->dispatch($req);
-        $this->assertEquals(204, $resp->status_code);
+        static::assertEquals(204, $resp->status_code);
 
       // Ensure zero token is created for this user
         $count = MongoDBUserToken::count(array(
         'user' => $this->user->getId()
         ));
-        $this->assertEquals(0, $count);
+        static::assertEquals(0, $count);
     }
 
-    public function testUserTokensBadPayload()
+    public function testUserTokensBadPayload() : void
     {
         $dispatcher = new \photon\core\Dispatcher;
 
@@ -152,6 +152,6 @@ class TokensTest extends \tests\TestCase
         $req = \photon\test\HTTP::baseRequest('POST', $url, null, $stream, array(), array('content-type' => 'application/json'));
         $req->user = $this->user;
         list($req, $resp) = $dispatcher->dispatch($req);
-        $this->assertEquals(400, $resp->status_code);
+        static::assertEquals(400, $resp->status_code);
     }
 }

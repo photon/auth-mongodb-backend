@@ -6,7 +6,7 @@ use \photon\config\Container as Conf;
 
 class GroupTest extends \tests\TestCase
 {
-    public function testUnknownAcl()
+    public function testUnknownAcl() : void
     {
         $dispatcher = new \photon\core\Dispatcher;
 
@@ -17,10 +17,10 @@ class GroupTest extends \tests\TestCase
         $req->user = $this->admin;
         list($req, $resp) = $dispatcher->dispatch($req);
         file_put_contents('/tmp/aaa.html', $resp->content);
-        $this->assertEquals(404, $resp->status_code);
+        static::assertEquals(404, $resp->status_code);
     }
 
-    public function testUnkownGroup()
+    public function testUnkownGroup() : void
     {
         $dispatcher = new \photon\core\Dispatcher;
 
@@ -31,10 +31,10 @@ class GroupTest extends \tests\TestCase
         $req = \photon\test\HTTP::baseRequest('DELETE', $url);
         $req->user = $this->admin;
         list($req, $resp) = $dispatcher->dispatch($req);
-        $this->assertEquals(404, $resp->status_code);
+        static::assertEquals(404, $resp->status_code);
     }
 
-    public function testDeleteGroup()
+    public function testDeleteGroup() : void
     {
         $dispatcher = new \photon\core\Dispatcher;
 
@@ -49,6 +49,6 @@ class GroupTest extends \tests\TestCase
         $req = \photon\test\HTTP::baseRequest('DELETE', $url);
         $req->user = $this->admin;
         list($req, $resp) = $dispatcher->dispatch($req);
-        $this->assertEquals(204, $resp->status_code);
+        static::assertEquals(204, $resp->status_code);
     }
 }

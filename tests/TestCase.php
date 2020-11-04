@@ -7,7 +7,7 @@ use photon\auth\api\MongoDB;
 use photon\auth\MongoDBAcl;
 use photon\auth\MongoDBBackend;
 
-class TestCase extends \photon\test\TestCase
+abstract class TestCase extends \photon\test\TestCase
 {
     protected $acl = null;
     protected $group = null;
@@ -38,7 +38,7 @@ class TestCase extends \photon\test\TestCase
         $endpoints = MongoDB\APICommon::getURLs();
         $error500 = array(
           'regex' => '#(.*)#',
-          'view' => function ($request, $match) {
+          'view' => function ($request, $match) : void {
               throw new \photon\views\APIJson\Exception;
           },
         );
@@ -56,7 +56,7 @@ class TestCase extends \photon\test\TestCase
         Conf::set('urls', $urls);
     }
 
-    protected function createAcl()
+    protected function createAcl() : void
     {
         $acl = new \photon\auth\MongoDBAcl;
         $acl->setName('x86-64');
@@ -65,7 +65,7 @@ class TestCase extends \photon\test\TestCase
         $this->acl = $acl;
     }
 
-    protected function createGroup()
+    protected function createGroup() : void
     {
         $group = new \photon\auth\MongoDBGroup;
         $group->setName('Mun');
@@ -74,7 +74,7 @@ class TestCase extends \photon\test\TestCase
         $this->group = $group;
     }
 
-    protected function createUser()
+    protected function createUser() : void
     {
         $user = new \photon\auth\MongoDBUser;
         $user->setName('Mick Robot');
@@ -85,7 +85,7 @@ class TestCase extends \photon\test\TestCase
         $this->user = $user;
     }
 
-    protected function createUser2()
+    protected function createUser2() : void
     {
         $user = new \photon\auth\MongoDBUser;
         $user->setName('Cretinous Rabbit');
@@ -96,7 +96,7 @@ class TestCase extends \photon\test\TestCase
         $this->user2 = $user;
     }
 
-    protected function createAdmin()
+    protected function createAdmin() : void
     {
         $user = new \photon\auth\MongoDBUser;
         $user->setName('John DOE');

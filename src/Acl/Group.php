@@ -16,7 +16,7 @@ class Group extends APICommon
     private $acl = null;
     private $group = null;
 
-    protected function hookBeforeRequest($request, $match)
+    protected function hookBeforeRequest($request, $match) : void
     {
         $this->ensureUserIsConnected($request);
         $this->ensureUserIsAdmin($request);

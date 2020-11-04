@@ -18,60 +18,60 @@ class APICommon extends APIJson\Rest
         $this->config = MongoDBBackend::getConfig();
     }
 
-    protected function getAclClass()
+    protected function getAclClass() : string
     {
         return $this->config['acl_class'];
     }
 
-    protected function getTokenClass()
+    protected function getTokenClass() : string
     {
         return $this->config['token_class'];
     }
 
-    protected function getUserClass()
+    protected function getUserClass() : string
     {
         return $this->config['user_class'];
     }
 
-    protected function getGroupClass()
+    protected function getGroupClass() : string
     {
         return $this->config['group_class'];
     }
 
-    protected function getUserQueryById($id)
+    protected function getUserQueryById($id) : array
     {
         return [
         $this->config['user_id'] => $this->config['user_class']::createObjectID($id),
         ];
     }
 
-    protected function getGroupQueryById($id)
+    protected function getGroupQueryById($id) : array
     {
         return [
         '_id' => $this->config['group_class']::createObjectID($id),
         ];
     }
 
-    protected function getTokenQueryById($id)
+    protected function getTokenQueryById($id) : array
     {
         return [
         '_id' => $this->config['token_class']::createObjectID($id),
         ];
     }
 
-    protected function getAclQueryById($id)
+    protected function getAclQueryById($id) : array
     {
         return [
         '_id' => $this->config['acl_class']::createObjectID($id),
         ];
     }
 
-    protected function getPreconditionClass()
+    protected function getPreconditionClass() : string
     {
         return $this->config['precondition_class'];
     }
 
-    protected function getPreconditionAdmin()
+    protected function getPreconditionAdmin() : string
     {
         return $this->config['admin_precondition'];
     }

@@ -11,7 +11,7 @@ class Users extends APICommon
 {
     protected $handleCORS = true;
 
-    protected function hookBeforeRequest($request, $match)
+    protected function hookBeforeRequest($request, $match) : void
     {
         $this->ensureUserIsConnected($request);
         $this->ensureUserIsAdmin($request);

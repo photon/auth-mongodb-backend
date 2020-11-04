@@ -8,17 +8,17 @@ use photon\auth\MongoDBBackend;
 
 class AclsTest extends TestCase
 {
-    public function testListAclsNotConnected()
+    public function testListAclsNotConnected() : void
     {
         $dispatcher = new \photon\core\Dispatcher;
 
       // List users on an empty database (not connected)
         $req = \photon\test\HTTP::baseRequest('GET', '/api/acl');
         list($req, $resp) = $dispatcher->dispatch($req);
-        $this->assertEquals(403, $resp->status_code);
+        static::assertEquals(403, $resp->status_code);
     }
 
-    public function testListAclsConnectedAsUser()
+    public function testListAclsConnectedAsUser() : void
     {
         $dispatcher = new \photon\core\Dispatcher;
 
@@ -28,10 +28,10 @@ class AclsTest extends TestCase
         $req = \photon\test\HTTP::baseRequest('GET', '/api/acl');
         $req->user = $this->user;
         list($req, $resp) = $dispatcher->dispatch($req);
-        $this->assertEquals(403, $resp->status_code);
+        static::assertEquals(403, $resp->status_code);
     }
 
-    public function testListAclsConnectedAsAdmin()
+    public function testListAclsConnectedAsAdmin() : void
     {
         $dispatcher = new \photon\core\Dispatcher;
 
@@ -41,10 +41,10 @@ class AclsTest extends TestCase
         $req = \photon\test\HTTP::baseRequest('GET', '/api/acl');
         $req->user = $this->admin;
         list($req, $resp) = $dispatcher->dispatch($req);
-        $this->assertEquals(200, $resp->status_code);
+        static::assertEquals(200, $resp->status_code);
     }
 
-    public function testCreateAclsWithoutName()
+    public function testCreateAclsWithoutName() : void
     {
         $dispatcher = new \photon\core\Dispatcher;
 
@@ -59,10 +59,10 @@ class AclsTest extends TestCase
         $req = \photon\test\HTTP::baseRequest('POST', $url, null, $stream, array(), array('content-type' => 'application/json'));
         $req->user = $this->admin;
         list($req, $resp) = $dispatcher->dispatch($req);
-        $this->assertEquals(400, $resp->status_code);
+        static::assertEquals(400, $resp->status_code);
     }
 
-    public function testCreateAcls()
+    public function testCreateAcls() : void
     {
         $dispatcher = new \photon\core\Dispatcher;
 
@@ -77,9 +77,9 @@ class AclsTest extends TestCase
         $req = \photon\test\HTTP::baseRequest('POST', $url, null, $stream, array(), array('content-type' => 'application/json'));
         $req->user = $this->admin;
         list($req, $resp) = $dispatcher->dispatch($req);
-        $this->assertEquals(201, $resp->status_code);
+        static::assertEquals(201, $resp->status_code);
         $json = json_decode($resp->content);
-        $this->assertNotEquals(false, $json);
+        static::assertNotEquals(false, $json);
 
       // Reload acl (generate exception if do not exists)
         $acl = new \photon\auth\MongoDBAcl(array('name' => 'printer'));
@@ -89,13 +89,13 @@ class AclsTest extends TestCase
         $req = \photon\test\HTTP::baseRequest('GET', $url);
         $req->user = $this->admin;
         list($req, $resp) = $dispatcher->dispatch($req);
-        $this->assertEquals(200, $resp->status_code);
+        static::assertEquals(200, $resp->status_code);
 
       // Delete the acl
         $url = '/api/acl/' . $acl->getId();
         $req = \photon\test\HTTP::baseRequest('DELETE', $url);
         $req->user = $this->admin;
         list($req, $resp) = $dispatcher->dispatch($req);
-        $this->assertEquals(204, $resp->status_code);
+        static::assertEquals(204, $resp->status_code);
     }
 }
